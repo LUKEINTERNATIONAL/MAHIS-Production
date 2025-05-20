@@ -1,1 +1,0 @@
-import{R as t}from"./report_service-e3fa2360.js";class p extends t{constructor(){super()}generate(r,e){return this.getReport("/programs/".concat(this.programId,"/reports/").concat(r),e)}}export{p as P};
