@@ -25,9 +25,9 @@ if (typeof navigator !== "undefined" && navigator.connection) {
     });
 }
 
-const offineProgramIds = [33, 32, 14, 1];
+const offineProgramIds = [33, 32];
 
-async function getProgram() {
+async function getPrograms() {
     const data = await DatabaseManager.getOfflineData("activeProgramInContext");
     return data;
 }
@@ -92,7 +92,7 @@ const syncPatientDataService = {
             // await patientService.setPatientCachedRecord();
             // await patientService.sharePatientRecords();
 
-            const activeProgramData = await getProgram();
+            const activeProgramData = await getPrograms();
             const activeProgramId = activeProgramData?.[0]?.program_id;
             const isOfflineProgram = activeProgramId && offineProgramIds.includes(activeProgramId);
 
@@ -152,8 +152,16 @@ const syncPatientDataService = {
     },
 
     async getPatientData() {
+        const latestRecord = await DatabaseManager.getOfflineData(
+            "patientRecords",
+            { sync_status: "" },
+            {
+                getLatest: true,
+                orderBy: "encounter_datetime",
+            }
+        );
         try {
-            let previousSyncDate = await previousSyncService.getPreviousSyncDate();
+            let previousSyncDate = latestRecord?.encounter_datetime || "";
             let patientsData = await this.getPatientIds(previousSyncDate);
 
             if (!patientsData?.sync_patients) {
@@ -367,9 +375,6 @@ const syncPatientDataService = {
         // Get the latest date from all pending updates
         const latestDate = this.pendingSyncUpdates.sort().pop();
         this.pendingSyncUpdates = [];
-
-        // Perform the actual update
-        await previousSyncService.setPreviousSyncDate(latestDate);
 
         // Reset the scheduled flag
         this.syncUpdateScheduled = false;
