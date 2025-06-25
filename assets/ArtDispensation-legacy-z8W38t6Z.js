@@ -1,0 +1,1 @@
+System.register(["./ArtDispensation.vue_vue_type_script_setup_true_lang-legacy-C9QZGRoN.js","./vendor-legacy-DsLbtJI7.js","./lodash-legacy-pOOc9Efu.js","./app_encounter_service-legacy-B-qzALzd.js","./index-legacy-BwQId1L0.js"],function(e,t){"use strict";return{setters:[t=>{t._,e("default",t._)},null,null,null,null],execute:function(){}}});
